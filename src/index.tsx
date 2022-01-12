@@ -1,38 +1,151 @@
-import React, { useState } from 'react';
-import { initializeWidget, useActiveViewId, useRecords } from '@vikadata/widget-sdk';
-import { Setting } from './setting';
-import { Button } from '@vikadata/components';
-import { FiledSelector } from './fieldPicker';
+import { Button } from "@vikadata/components";
+import {
+  FieldPicker,
+  initializeWidget,
+  useActiveViewId,
+  useDatasheet,
+  useRecords,
+} from "@vikadata/widget-sdk";
+import React, { useEffect, useState } from "react";
+
+let cId: any;
+let randomTimes = 10;
 
 export const randomRecord: React.FC = () => {
+  const datasheet = useDatasheet();
   const viewId = useActiveViewId();
   const records = useRecords(viewId);
-  const [targetValue, setTargetValue] = useState("");
-  const [fieldId, setFieldId] = useState<string | null>()
+  const [luckyOne, setLuckyOne] = useState<any>();
+  const [fieldId, setFieldId] = useState<any>();
+  const [fieldCheckId, setFieldCheckId] = useState<any>();
+  const [shouldShowFullName, setShouldShowFullName] = useState(false);
+  const [lastNameLoding, setLastNameLoading] = useState(false);
 
-  const getRandom = function(){
-    const index =  Math.floor((Math.random()* records.length )+1);
-    const selectedRecord = records[index];
-    const cellValue = selectedRecord.getCellValueString(fieldId);
-    console.log({fieldId, cellValue})
-    setTargetValue(cellValue);
+  const memberNames = records
+    .map((record) => record.getCellValueString(fieldId))
+    .filter(Boolean);
+
+  useEffect(() => {
+    if (lastNameLoding) {
+      cId = setInterval(() => {
+        if (randomTimes < 0) {
+          clearInterval(cId);
+          setLastNameLoading(false);
+          return;
+        }
+        const index = Math.floor(Math.random() * memberNames.length);
+        const luckyOne = memberNames[index];
+        setLuckyOne(luckyOne);
+        randomTimes--;
+      }, 200);
+    }
+
+    return () => clearInterval(cId);
+  }, [shouldShowFullName, lastNameLoding, luckyOne, setLuckyOne]);
+
+  const getRandom = function () {
+    if (!lastNameLoding && !luckyOne) return setLastNameLoading(true);
+    if (!shouldShowFullName && !luckyOne) {
+      return setShouldShowFullName(true);
+    }
+    if (luckyOne) {
+      const name = luckyOne.slice(1) + "???";
+      const selectedRecordIndex = memberNames.findIndex(
+        (item) => item === name
+      );
+      const selectedRecord = records[selectedRecordIndex];
+      const result = datasheet?.checkPermissionsForSetRecord(
+        selectedRecord.recordId,
+        { [fieldCheckId]: true }
+      );
+      if (result?.acceptable) {
+        datasheet!.setRecord(selectedRecord.recordId, { [fieldCheckId]: true });
+      }
+      setLuckyOne("");
+      return;
+    }
+  };
+  const showName = luckyOne.slice(1) + "???";
+
+  if (fieldId && fieldCheckId) {
+    return (
+      <div
+        style={{
+          height: "100%",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            width: "50%",
+            margin: "0 auto",
+          }}
+        >
+          <svg
+            style={{
+              width: "100%",
+              fontSize: "3em",
+            }}
+            viewBox="0 0 200 200"
+          >
+            <text
+              fill={"#262626"}
+              x="100"
+              y="100"
+              text-anchor="middle"
+              dominant-baseline="middle"
+            >
+              {showName}
+            </text>
+          </svg>
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            bottom: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
+          <Button
+            color="primary"
+            onClick={getRandom}
+            disabled={shouldShowFullName || lastNameLoding}
+          >
+            {luckyOne
+              ? shouldShowFullName
+                ? "确定结果"
+                : "到底是谁？"
+              : "点击进行抽取"}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!viewId) {
+    return null;
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
-      <div style={{ flexGrow: 1, overflow: 'auto', padding: '0 8px'}}>
-      <p>请选择一列进行抽选</p>
-      <FiledSelector
-        fieldId={fieldId}
-        setFieldId={setFieldId}
-      />
-      <Button color="primary" onClick={getRandom}> 点击进行抽取 </Button>
-      <h3>被抽到的是:{targetValue}</h3>
+    <div style={{ display: "flex", height: "100%" }}>
+      <div style={{ flexGrow: 1, overflow: "auto", padding: "0 8px" }}>
+        <p>先选择要抽取的人名的一列</p>
+        <FieldPicker
+          viewId={viewId}
+          fieldId={fieldId}
+          onChange={(option) => setFieldId(option.value)}
+        />
+        <p>选择一个「勾选」类型的维格列（标记中奖人）</p>
+        <FieldPicker
+          viewId={viewId}
+          fieldId={fieldCheckId}
+          onChange={(option) => setFieldCheckId(option.value)}
+        />
       </div>
-      <Setting />
     </div>
   );
 };
 
 initializeWidget(randomRecord, process.env.WIDGET_PACKAGE_ID);
-

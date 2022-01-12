@@ -1,0 +1,17 @@
+{
+  "packageId": "wpkZTi8HSZWWg",
+  "spaceId": "spczdmQDfBAn5",
+  "entry": "./src/index.tsx",
+  "name": {
+    "zh-CN": "抽奖小程序",
+    "en-US": "抽奖小程序"
+  },
+  "icon": "./package_icon.png",
+  "cover": "./cover.png",
+  "authorIcon": "./author_icon.png",
+  "description": {
+    "zh-CN": "随机抽取一列下单元格的数据，被抽中后的人将会被标记",
+    "en-US": "The data in the cell under a column is randomly selected, and those who are selected will be marked"
+  },
+  "globalPackageId": "wpk2jJ7qZS0VG"
+}
