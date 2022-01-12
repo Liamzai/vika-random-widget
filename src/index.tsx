@@ -65,7 +65,7 @@ export const randomRecord: React.FC = () => {
       return;
     }
   };
-  const showName = luckyOne.slice(1) + "???";
+  const showName = luckyOne ? luckyOne.slice(1) : '' + "???";
 
   if (fieldId && fieldCheckId) {
     return (
