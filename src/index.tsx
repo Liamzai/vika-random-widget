@@ -45,11 +45,11 @@ export const randomRecord: React.FC = () => {
 
   const getRandom = function () {
     if (!lastNameLoding && !luckyOne) return setLastNameLoading(true);
-    if (!shouldShowFullName && !luckyOne) {
+    if (!shouldShowFullName) {
       return setShouldShowFullName(true);
     }
     if (luckyOne) {
-      const name = luckyOne.slice(1) + "???";
+      const name = luckyOne;
       const selectedRecordIndex = memberNames.findIndex(
         (item) => item === name
       );
@@ -62,10 +62,12 @@ export const randomRecord: React.FC = () => {
         datasheet!.setRecord(selectedRecord.recordId, { [fieldCheckId]: true });
       }
       setLuckyOne("");
+      randomTimes = 10;
+      setShouldShowFullName(false);
       return;
     }
   };
-  const showName = luckyOne ? luckyOne.slice(1) : '' + "???";
+  const showName = shouldShowFullName ? luckyOne : (luckyOne ? luckyOne.slice(0, 1) : '') + "???";
 
   if (fieldId && fieldCheckId) {
     return (
@@ -111,7 +113,7 @@ export const randomRecord: React.FC = () => {
           <Button
             color="primary"
             onClick={getRandom}
-            disabled={shouldShowFullName || lastNameLoding}
+            disabled={lastNameLoding}
           >
             {luckyOne
               ? shouldShowFullName
