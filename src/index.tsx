@@ -11,10 +11,28 @@ import React, { useEffect, useState } from "react";
 let cId: any;
 let randomTimes = 10;
 
+function shuffle(array) {
+  let currentIndex = array.length,
+    randomIndex;
+
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
 export const randomRecord: React.FC = () => {
   const datasheet = useDatasheet();
   const viewId = useActiveViewId();
-  const records = useRecords(viewId);
+  const sourceRecords = useRecords(viewId);
+  const records = shuffle(sourceRecords);
   const [luckyOne, setLuckyOne] = useState<any>();
   const [fieldId, setFieldId] = useState<any>();
   const [fieldCheckId, setFieldCheckId] = useState<any>();
