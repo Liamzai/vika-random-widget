@@ -13,7 +13,7 @@
     "zh-CN": "随机抽取一列下单元格的人名，被抽中后的人将会被标记",
     "en-US": "Randomly select the name of the person in the cell under a column, and the person who is selected will be marked"
   },
-  "authorName": "维格实验室",
+  "authorName": "vika实验室",
   "authorLink": "https://github.com/Liamzai/vika-random-widget",
   "authorEmail": "lijiali@vikadata.com",
   "globalPackageId": "wpk3zrdsALSd1"
