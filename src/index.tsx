@@ -67,7 +67,9 @@ export const randomRecord: React.FC = () => {
       return;
     }
   };
-  const showName = shouldShowFullName ? luckyOne : (luckyOne ? luckyOne.slice(0, 1) : '') + "???";
+  const showName = shouldShowFullName
+    ? luckyOne
+    : (luckyOne ? luckyOne.slice(0, 1) : "") + "???";
 
   if (fieldId && fieldCheckId) {
     return (
@@ -110,16 +112,12 @@ export const randomRecord: React.FC = () => {
             transform: "translateX(-50%)",
           }}
         >
-          <Button
-            color="primary"
-            onClick={getRandom}
-            disabled={lastNameLoding}
-          >
+          <Button color="primary" onClick={getRandom} disabled={lastNameLoding}>
             {luckyOne
               ? shouldShowFullName
                 ? "确定结果"
                 : "到底是谁？"
-              : "点击进行抽取"}
+              : "让我们看看幸运儿姓什么？"}
           </Button>
         </div>
       </div>
