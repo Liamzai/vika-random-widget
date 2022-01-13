@@ -3,7 +3,7 @@
   "spaceId": "spczdmQDfBAn5",
   "entry": "./src/index.tsx",
   "name": {
-    "zh-CN": "抽奖小程序",
+    "zh-CN": "抽取幸运儿",
     "en-US": "Lottery"
   },
   "icon": "./package_icon.png",
