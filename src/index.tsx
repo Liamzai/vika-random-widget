@@ -32,16 +32,18 @@ export const randomRecord: React.FC = () => {
   const datasheet = useDatasheet();
   const viewId = useActiveViewId();
   const sourceRecords = useRecords(viewId);
-  const records = shuffle(sourceRecords);
   const [luckyOne, setLuckyOne] = useState<any>();
   const [fieldId, setFieldId] = useState<any>();
   const [fieldCheckId, setFieldCheckId] = useState<any>();
   const [shouldShowFullName, setShouldShowFullName] = useState(false);
   const [lastNameLoding, setLastNameLoading] = useState(false);
+  const records = shuffle(sourceRecords).filter((record) =>
+    record.getCellValueString(fieldId)
+  );
 
-  const memberNames = records
-    .map((record) => record.getCellValueString(fieldId))
-    .filter(Boolean);
+  const memberNames = records.map((record) =>
+    record.getCellValueString(fieldId)
+  );
 
   useEffect(() => {
     if (lastNameLoding) {
