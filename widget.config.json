@@ -1,6 +1,6 @@
 {
-  "packageId": "wpk6yEDXKUk3J",
-  "spaceId": "spczdmQDfBAn5",
+  "packageId": "wpkVBkTe9P76N",
+  "spaceId": "spcY8ecE7EkpZ",
   "entry": "./src/index.tsx",
   "name": {
     "zh-CN": "抽取幸运儿",
