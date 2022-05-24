@@ -113,7 +113,7 @@ export const randomRecord: React.FC = () => {
             viewBox="0 0 200 200"
           >
             <text
-              fill={"#262626"}
+              fill={"#7B67EE"}
               x="100"
               y="100"
               text-anchor="middle"
